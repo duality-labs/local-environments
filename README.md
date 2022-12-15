@@ -14,7 +14,7 @@ to give scripts permission:
 
 ### setup
 
-start the duality node. This re-initializes the `~/.duality` directory
+run thef ollowing to start the duality node. This re-initializes the `~/.duality` directory
 
  `./start-duality-standalone.sh`
 
