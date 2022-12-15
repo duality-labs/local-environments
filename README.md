@@ -2,7 +2,9 @@
 
 ## Run a simulation on duality:
 
-requirements: globaly available `dualityd` binary
+requirements: 
+- globaly available `dualityd` binary
+- go
 
 ### note:
 the scripts need permission, they modify and delete files.
