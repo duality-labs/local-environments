@@ -30,4 +30,4 @@ run the go code:
 
 `go run cmd/tx-sim/main.go`
 
-This initializes a grpc server and tries to simulate the transaction using encoded transactio bytes in `encoded-signed-tx.txt`
+This initializes a grpc server and tries to simulate the transaction using encoded transaction bytes in `encoded-signed-tx.txt`
