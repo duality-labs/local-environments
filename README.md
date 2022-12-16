@@ -21,7 +21,7 @@ to give scripts permission:
 chmod +x {script_name}.sh
 ```
 
-## Run a standalone chain on duality:
+## Run a standalone duality consumer chain:
  ```bash
 # this reinitializes the .duality directory. Use with caution
 ./start-duality-standalone.sh
