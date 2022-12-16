@@ -24,7 +24,7 @@ chmod +x {script_name}.sh
 ## Run a standalone duality consumer chain:
  ```bash
 # this reinitializes the .duality directory. Use with caution
-./start-duality-standalone.sh
+scripts/standalone-node/start-duality-standalone.sh
 ```
 
 #### Optional: setup Deposit TX simulation
@@ -32,7 +32,7 @@ chmod +x {script_name}.sh
 in a new terminal:
 
  ```bash
-./get-duality-tx.sh
+scripts/standalone-node/get-duality-tx.sh
 ```
 
 This creates a few files. the important one is `encoded-signed-tx.txt`
@@ -64,5 +64,5 @@ rust v1.65 (tested with 1.66.0 as well)
 # - initialise a Provider chain
 # - pass a Consumer chain governance proposal
 # - start the Consumer chain
-./run.sh
+scripts/full-deployment/run.sh
 ```
