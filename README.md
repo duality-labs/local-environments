@@ -1,35 +1,64 @@
-# sim-test
+# Local Environments
 
-## Run a simulation on duality:
+### Global requirements:
+```bash
+## os: OSX / Linux
 
-requirements: 
-- globaly available `dualityd` binary
-- go
+# go v1.18
+brew install go@1.18
+# jq
+brew install jq
+```
+``` bash
+# dualityd
+```
+to get dualityd binary follow [installation guide](https://github.com/duality-labs/duality/blob/main/readme.md)
 
-### note:
-the scripts need permission, they modify and delete files.
+some scripts need permission as they modify and delete files.
 to give scripts permission:
 
-`chmod +x start-duality-standalone.sh`
+```bash
+chmod +x {script_name}.sh
+```
 
-`chmod +x get-duality-tx.sh`
+## Run a standalone chain on duality:
+ ```bash
+# this reinitializes the .duality directory. Use with caution
+./start-duality-standalone.sh
+```
 
-### setup
+#### Optional: setup Deposit TX simulation
 
-run the following to start the duality node. This re-initializes the `~/.duality` directory
+in a new terminal:
 
- `./start-duality-standalone.sh`
-
-in a new terminal, run :
-
-`./get-duality-tx.sh`
-
+ ```bash
+./get-duality-tx.sh
+```
 
 This creates a few files. the important one is `encoded-signed-tx.txt`
+This is the raw signed transaction bytes to send over to the simulation request
 
+run the simulation:
 
-run the go code:
+```bash
+go run cmd/tx-sim/main.go
+```
+## Run a full Duality deployment:
+### Additional requirements:
+```bash
+#interchain security provider chain binary
+interchain-security-pd
+#hermes IBC relayer
+hermes v0.15.0
+#rust required by Hermes
+rust v1.65
+```
+[install](https://github.com/cosmos/interchain-security/blob/main/README.md) interchain-security-pd 
 
-`go run cmd/tx-sim/main.go`
+[install](https://www.rust-lang.org/tools/install) rust 
 
-This initializes a grpc server and tries to simulate the transaction using encoded transaction bytes in `encoded-signed-tx.txt`
+[install](https://hermes.informal.systems/quick-start/installation.html) hermes 
+
+ ```bash
+./run.sh
+```
