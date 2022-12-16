@@ -31,7 +31,6 @@ To run a standalone Duality consumer chain, use the following script:
 
 
  ```bash
-# this reinitializes the .duality directory. Use with caution
 scripts/standalone-node/start-duality-standalone.sh
 ```
 :warning: This script reinitializes the .duality directory
