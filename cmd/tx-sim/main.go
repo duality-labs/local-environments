@@ -35,7 +35,7 @@ func simulateTx() error {
 	//create a new client for the Protobuf Txservice.
 	txClient := tx.NewServiceClient(grpcConn)
 
-	txBytes, err := os.ReadFile("encoded-signed-tx.txt") // read protobuf-encoded txytes from file
+	txBytes, err := os.ReadFile("../../scripts/standalone-node/tx-data/encoded-signed-tx.txt") // read protobuf-encoded txytes from file
 	if err != nil {
 		fmt.Print(err)
 		return err

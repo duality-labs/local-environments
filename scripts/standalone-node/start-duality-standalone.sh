@@ -27,10 +27,10 @@ $DUALITY_BINARY add-consumer-section --home $DUALITY_HOME
 sleep 1
 
 # Create user account keypair
-$DUALITY_BINARY keys add $GENACC $KEYRING --home $DUALITY_HOME --output json > $DUALITY_HOME/consumer_keypair.json 2>&1
+$DUALITY_BINARY keys add $GENACC $KEYRING --home $DUALITY_HOME --output json > $DUALITY_HOME/duality_keypair.json 2>&1
 
-# Add account in genesis (required by Hermes)
-$DUALITY_BINARY add-genesis-account $(jq -r .address $DUALITY_HOME/consumer_keypair.json) 1000000000000stake --home $DUALITY_HOME
+# Add account in genesis
+$DUALITY_BINARY add-genesis-account $(jq -r .address $DUALITY_HOME/duality_keypair.json) 1000000000000stake --home $DUALITY_HOME
 
 # add a second token to the balances to be able to perform deposits 
 # &&
