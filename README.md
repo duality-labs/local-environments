@@ -1,68 +1,81 @@
 # Local Environments
 
-### Global requirements:
-```bash
-## os: OSX / Linux
+## Global Requirements
 
-# go v1.18
+To run the scripts in this repository, you need to have the following software installed:
+
+### OSX / Linux
+- Go v1.18
+- jq
+- dualityd
+
+To install Go and jq on OSX or Linux, you can use the following commands:
+
+```bash
 brew install go@1.18
-# jq
 brew install jq
 ```
-``` bash
-# dualityd
-```
-to get dualityd binary follow [installation guide](https://github.com/duality-labs/duality/blob/main/readme.md)
 
-some scripts need permission as they modify and delete files.
-to give scripts permission:
+to get `dualityd` binary follow [installation guide](https://github.com/duality-labs/duality/blob/main/readme.md)
+
+## Giving Scripts Permission
+Some of the scripts in this repository modify and delete files, so you will need to give them permission to run. 
+To do this, use the following command:
 
 ```bash
 chmod +x {script_name}.sh
 ```
 
-## Run a standalone duality consumer chain:
+## Running a standalone duality consumer chain:
+To run a standalone Duality consumer chain, use the following script:
+
+
  ```bash
 # this reinitializes the .duality directory. Use with caution
 scripts/standalone-node/start-duality-standalone.sh
 ```
+:warning: This script reinitializes the .duality directory
 
 #### Optional: setup Deposit TX simulation
 
-in a new terminal:
-
+To set up a simulation of a deposit transaction, open a new terminal and run the following script:
  ```bash
 scripts/standalone-node/get-duality-tx.sh
 ```
 
-This creates a few files. the important one is `encoded-signed-tx.txt`
-This is the raw signed transaction bytes to send over to the simulation request
+This script creates a few files, including encoded-signed-tx.txt, which is the raw signed transaction bytes to send over to the simulation request. To run the simulation, use the following command:
 
-run the simulation:
 
 ```bash
 go run cmd/tx-sim/main.go
 ```
-## Run a full Duality deployment:
-### Additional requirements:
-```bash
-#interchain security provider chain binary
-# v0.2.1 required as later commits change proposal structure
-interchain-security-pd
-#hermes IBC relayer
-hermes v0.15.0
-#rust required by Hermes
-rust v1.65 (tested with 1.66.0 as well)
-```
-[install](https://github.com/cosmos/interchain-security/tree/v0.2.1) interchain-security-pd 
+## Running a Full Duality Deployment:
+To run a full Duality deployment, you will need the following additional software:
 
-[install](https://www.rust-lang.org/tools/install) rust 
+- interchain-security-pd (v0.2.1 required since later commits change proposal structure)
+- Hermes IBC relayer (v0.15.0)
+- Rust (v1.65 or later)
 
-[install](https://hermes.informal.systems/quick-start/installation.html) hermes 
+To install interchain-security-pd, follow the instructions [here](https://github.com/cosmos/interchain-security/tree/v0.2.1).
+
+To install Rust, follow the instructions [here](https://www.rust-lang.org/tools/install).
+
+To install Hermes, follow the instructions [here](https://hermes.informal.systems/quick-start/installation.html).
+
+To run a full Duality deployment, use the following script:
 
  ```bash
-# - initialise a Provider chain
-# - pass a Consumer chain governance proposal
-# - start the Consumer chain
 scripts/full-deployment/run.sh
+```
+This script will:
+
+- Start a provider chain with 2 nodes
+- Pass a Duality consumer chain governance proposal
+- Start the Duality chain with 2 nodes
+
+:warning: The nodes will run idle and continue to consume resources and storage until terminated. 
+To kill the processes, use the following commands:
+```bash
+killall dualityd &> /dev/null || true
+killall interchain-security-pd &> /dev/null || true
 ```
