@@ -57,14 +57,28 @@ sleep 1
 $CONSUMER_BINARY keys add $CONSUMER_USER $KEYRING --home $CONSUMER_HOME --output json > $CONSUMER_HOME/consumer_keypair.json 2>&1
 
 # Add account in genesis (required by Hermes)
-$CONSUMER_BINARY add-genesis-account $(jq -r .address $CONSUMER_HOME/consumer_keypair.json) 1000000000stake --home $CONSUMER_HOME
+$CONSUMER_BINARY add-genesis-account $(jq -r .address $CONSUMER_HOME/consumer_keypair.json) 1000000000000stake --home $CONSUMER_HOME
 
 # Add CONSUMER_USER as default admin
 CONSUMER_USER_ADDRESS=$(jq -r .address $CONSUMER_HOME/consumer_keypair.json)
 jq ".app_state.adminmodule.admins += [\"$CONSUMER_USER_ADDRESS\"]" $CONSUMER_HOME/config/genesis.json > \
       $CONSUMER_HOME/edited_genesis.json && mv $CONSUMER_HOME/edited_genesis.json $CONSUMER_HOME/config/genesis.json
 sleep 1
-
+# add a second token to the balances to be able to perform deposits 
+# &&
+# append some custom fee tiers to unlock dex functionality
+jq '.app_state.bank.balances[].coins += [{"denom": "stake2", "amount": "1000000000000"}]
+       | .app_state.dex +=
+ {
+     "FeeTierList": [
+        {"fee": "1", "id": "0"},
+        {"fee": "3", "id": "1"}, 
+        {"fee": "5", "id": "2"}, 
+        {"fee": "10", "id": "3"}
+    ],
+    "FeeTierCount": "4",
+}' $CONSUMER_HOME/config/genesis.json > \
+ $CONSUMER_HOME/edited_genesis.json && mv $CONSUMER_HOME/edited_genesis.json $CONSUMER_HOME/config/genesis.json
 # Copy validator key files
 cp $PROVIDER_HOME/config/priv_validator_key.json $CONSUMER_HOME/config/priv_validator_key.json
 cp $PROVIDER_HOME/config/node_key.json $CONSUMER_HOME/config/node_key.json
