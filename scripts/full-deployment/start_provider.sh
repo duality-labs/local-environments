@@ -114,13 +114,19 @@ tee $PROVIDER_HOME/consumer-proposal.json<<EOF
     },
     "genesis_hash": "519df96a862c30f53e67b1277e6834ab4bd59dfdd08c781d1b7cf3813080fb28",
     "binary_hash": "09184916f3e85aa6fa24d3c12f1e5465af2214f13db265a52fa9f4617146dea5",
-    "spawn_time": "2022-06-01T09:10:00.000000000-00:00", 
+    "spawn_time": "2022-06-01T09:10:00.000000000-00:00",
+    "blocks_per_distribution_transmission": 1000,
+    "consumer_redistribution_fraction": "0.75",
+    "historical_entries": 10000,
+    "transfer_timeout_period": 3600000000000,
+    "ccv_timeout_period": 2419200000000000,
+    "unbonding_period": 1728000000000000,
     "deposit": "10000001stake"
 }
 EOF
 
 $PROVIDER_BINARY tx gov submit-proposal consumer-addition $PROVIDER_HOME/consumer-proposal.json \
-	--chain-id $PROVIDER_CHAIN_ID --node tcp://$PROVIDER_RPC_LADDR --from $VALIDATOR --home $PROVIDER_HOME --keyring-backend test -b block -y
+	--chain-id $PROVIDER_CHAIN_ID --node tcp://$PROVIDER_RPC_LADDR --from $VALIDATOR --home $PROVIDER_HOME --gas 300000 --keyring-backend test -b block -y
 sleep 1
 
 # Vote yes to proposal
