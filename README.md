@@ -5,14 +5,14 @@
 To run the scripts in this repository, you need to have the following software installed:
 
 ### OSX / Linux
-- Go v1.18
+- Go v1.19
 - jq
 - dualityd
 
 To install Go and jq on OSX or Linux, you can use the following commands:
 
 ```bash
-brew install go@1.18
+brew install go@1.19
 brew install jq
 ```
 
@@ -51,15 +51,24 @@ go run cmd/tx-sim/main.go
 ## Running a Full Duality Deployment:
 To run a full Duality deployment, you will need the following additional software:
 
-- interchain-security-pd (v0.2.1 required since later commits change proposal structure)
-- Hermes IBC relayer (v0.15.0)
-- Rust (v1.65 or later)
+- `dualityd` (v0.3.4 as used in duality-testnet-1 on Interchain Security)
+- `gaiad` (v10.0.1 as used in duality-testnet-1 on Interchain Security)
+- `hermes`: IBC relayer (v1.5.1 as used in duality-testnet-1 on Interchain Security)
+  - Rust (optional, v1.70 or later)
 
-To install interchain-security-pd, follow the instructions [here](https://github.com/cosmos/interchain-security/tree/v0.2.1).
+To install dualityd, follow the instructions [here](https://github.com/duality-labs/duality/tree/v0.3.4).
+  - or use Heighliner Docker image [ghcr.io/duality-labs/duality:15cb02ba6b8c87723c7fd4bd4ce0c3bf660d6aff](https://github.com/orgs/duality-labs/packages/container/duality/108783229?tag=15cb02ba6b8c87723c7fd4bd4ce0c3bf660d6aff) (specific commit for v0.3.4 release as specified by GitHub actions on the `main` branch commit or the release)
 
-To install Rust, follow the instructions [here](https://www.rust-lang.org/tools/install).
+To install gaiad, follow the instructions [here](https://hub.cosmos.network/main/getting-started/installation.html#install-the-binaries).
+  - or use `make install` from [source code](https://github.com/cosmos/gaia/tree/v10.0.1)
+  - or use Heighliner Docker image [ghcr.io/strangelove-ventures/heighliner/gaia:v10.0.1](https://github.com/strangelove-ventures/heighliner/pkgs/container/heighliner%2Fgaia/107555011?tag=v10.0.1)
 
 To install Hermes, follow the instructions [here](https://hermes.informal.systems/quick-start/installation.html).
+  - or install Rust and use `cargo install ibc-relayer-cli --version 1.5.1 --bin hermes --locked`
+  - or use Docker image: [informalsystems/hermes:1.5.1](https://hub.docker.com/layers/informalsystems/hermes/1.5.1/images/sha256-3eb82f872b6f116f4a71c350292aff551381b65eeb7c11867f8cd33090c6eb0b?context=explore)
+    - this image can be problematic when running on Alpine Linux on an ARM CPU
+
+To install Rust, follow the instructions [here](https://www.rust-lang.org/tools/install).
 
 To run a full Duality deployment, use the following script:
 

@@ -10,8 +10,8 @@ VALIDATOR="validator"
 VALIDATOR1="validator1"
 KEYRING="--keyring-backend test"
 TX_FLAGS="--gas-adjustment 100 --gas auto"
-PROVIDER_BINARY="interchain-security-pd"
-CONSUMER_BINARY="dualityd"
+PROVIDER_BINARY=${PROVIDER_BINARY:-gaiad}
+CONSUMER_BINARY=${CONSUMER_BINARY:-dualityd}
 NODE_IP="localhost"
 PROVIDER_RPC_LADDR="$NODE_IP:26658"
 PROVIDER_GRPC_ADDR="$NODE_IP:9091"
@@ -44,6 +44,11 @@ then
        exit 1
 fi
 
+# edit ccv section to include sections in consumer chain that don't exist in gaiad
+# see: https://github.com/cosmos/testnets/blob/44ac20213af02e64f4b7eed21ec9cb9508bbe893/replicated-security/duality-testnet-1/README.md?plain=1#L27
+jq '.params.soft_opt_out_threshold = "0.05"' "$CONSUMER_HOME"/consumer_section.json > "$CONSUMER_HOME"/edited_consumer_section.json && \
+	mv "$CONSUMER_HOME"/edited_consumer_section.json "$CONSUMER_HOME"/consumer_section.json
+
 jq -s '.[0].app_state.ccvconsumer = .[1] | .[0]' "$CONSUMER_HOME"/config/genesis.json "$CONSUMER_HOME"/consumer_section.json > "$CONSUMER_HOME"/genesis_consumer.json && \
 	mv "$CONSUMER_HOME"/genesis_consumer.json "$CONSUMER_HOME"/config/genesis.json
 
@@ -65,19 +70,7 @@ jq ".app_state.adminmodule.admins += [\"$CONSUMER_USER_ADDRESS\"]" $CONSUMER_HOM
       $CONSUMER_HOME/edited_genesis.json && mv $CONSUMER_HOME/edited_genesis.json $CONSUMER_HOME/config/genesis.json
 sleep 1
 # add a second token to the balances to be able to perform deposits 
-# &&
-# append some custom fee tiers to unlock dex functionality
-jq '.app_state.bank.balances[].coins += [{"denom": "stake2", "amount": "1000000000000"}]
-       | .app_state.dex +=
- {
-     "FeeTierList": [
-        {"fee": "1", "id": "0"},
-        {"fee": "3", "id": "1"}, 
-        {"fee": "5", "id": "2"}, 
-        {"fee": "10", "id": "3"}
-    ],
-    "FeeTierCount": "4",
-}' $CONSUMER_HOME/config/genesis.json > \
+jq '.app_state.bank.balances[].coins += [{"denom": "stake2", "amount": "1000000000000"}]' $CONSUMER_HOME/config/genesis.json > \
  $CONSUMER_HOME/edited_genesis.json && mv $CONSUMER_HOME/edited_genesis.json $CONSUMER_HOME/config/genesis.json
 # Copy validator key files
 cp $PROVIDER_HOME/config/priv_validator_key.json $CONSUMER_HOME/config/priv_validator_key.json
@@ -130,7 +123,9 @@ sleep 10
 # Setup Hermes in packet relayer mode
 killall hermes 2> /dev/null || true
 
-tee ~/.hermes/config.toml<<EOF
+rm -rf /root/.hermes
+mkdir /root/.hermes
+tee /root/.hermes/config.toml<<EOF
 [global]
 log_level = "trace"
 
@@ -153,7 +148,7 @@ enabled = true
 [[chains]]
 account_prefix = "cosmos"
 clock_drift = "5s"
-gas_adjustment = 0.1
+gas_multiplier = 1.1
 grpc_addr = "tcp://${CONSUMER_GRPC_ADDR}"
 id = "$CONSUMER_CHAIN_ID"
 key_name = "relayer"
@@ -175,7 +170,7 @@ websocket_addr = "ws://${CONSUMER_RPC_LADDR}/websocket"
 [[chains]]
 account_prefix = "cosmos"
 clock_drift = "5s"
-gas_adjustment = 0.1
+gas_multiplier = 1.1
 grpc_addr = "tcp://${PROVIDER_GRPC_ADDR}"
 id = "$PROVIDER_CHAIN_ID"
 key_name = "relayer"
@@ -196,18 +191,26 @@ websocket_addr = "ws://${PROVIDER_RPC_LADDR}/websocket"
 EOF
 
 # Delete all previous keys in relayer
-hermes keys delete $CONSUMER_CHAIN_ID -a
-hermes keys delete $PROVIDER_CHAIN_ID -a
+hermes keys delete --chain $CONSUMER_CHAIN_ID --all
+hermes keys delete --chain $PROVIDER_CHAIN_ID --all
 
 # Restore keys to hermes relayer
-hermes keys restore --mnemonic "$(jq -r .mnemonic $CONSUMER_HOME/consumer_keypair.json)" $CONSUMER_CHAIN_ID
+hermes keys add --chain $CONSUMER_CHAIN_ID --key-file $CONSUMER_HOME/consumer_keypair.json
 # temp_start_provider.sh creates key pair and stores it in keypair.json
-hermes keys restore --mnemonic "$(jq -r .mnemonic $PROVIDER_HOME/keypair.json)" $PROVIDER_CHAIN_ID
+hermes keys add --chain $PROVIDER_CHAIN_ID --key-file $PROVIDER_HOME/keypair.json
 
 sleep 5
 
-hermes create connection $CONSUMER_CHAIN_ID --client-a 07-tendermint-0 --client-b 07-tendermint-0
-hermes create channel $CONSUMER_CHAIN_ID --port-a consumer --port-b provider -o ordered --channel-version 1 connection-0
+# find status of clients using:
+# $ $CONSUMER_BINARY --home $CONSUMER_HOME query ibc client status 07-tendermint-0
+# $ $PROVIDER_BINARY --home $PROVIDER_HOME query ibc client status 07-tendermint-0
+# or state of clients using:
+# $ $CONSUMER_BINARY --home $CONSUMER_HOME query ibc client state 07-tendermint-0
+# $ $PROVIDER_BINARY --home $PROVIDER_HOME query ibc client state 07-tendermint-0
+# (the client IDs are "07-tendermint-0" because they are the first tendermint light clients crated on these chains)
+
+hermes create connection --a-chain $CONSUMER_CHAIN_ID --a-client 07-tendermint-0 --b-client 07-tendermint-0
+hermes create channel --a-chain $CONSUMER_CHAIN_ID --a-port consumer --b-port provider --order ordered --a-connection connection-0 --channel-version 1
 
 sleep 1
 
