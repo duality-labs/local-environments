@@ -26,6 +26,14 @@ docker run -it --init --rm \
 docker run -it duality:local-environments /bin/bash
 ```
 
+Note that this image should be able to be built in multiple platforms, eg.
+- docker build --platform linux/amd64 -t duality:local-environments .
+- docker build --platform linux/arm64 -t duality:local-environments .
+
+but it is best to not compile hermes in a non-native platform. During testing:
+- on a Macbook Pro M1 Max building native linux/arm64 took ~6mins
+- on a Macbook Pro M1 Max building non-native linux/amd64 took ~50mins
+
 ### Setup: OSX / Linux
 - Go v1.19
 - jq
