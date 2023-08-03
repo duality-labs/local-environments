@@ -5,14 +5,14 @@
 To run the scripts in this repository, you need to have the following software installed:
 
 ### OSX / Linux
-- Go v1.18
+- Go v1.19
 - jq
 - dualityd
 
 To install Go and jq on OSX or Linux, you can use the following commands:
 
 ```bash
-brew install go@1.18
+brew install go@1.19
 brew install jq
 ```
 
@@ -51,9 +51,13 @@ go run cmd/tx-sim/main.go
 ## Running a Full Duality Deployment:
 To run a full Duality deployment, you will need the following additional software:
 
+- dualityd (v0.3.4 as used in duality-testnet-1 on Interchain Security)
 - gaiad (v10.0.1 as used in duality-testnet-1 on Interchain Security)
 - Hermes IBC relayer (v0.15.0)
 - Rust (v1.65 or later)
+
+To install dualityd, follow the instructions [here](https://github.com/duality-labs/duality/tree/v0.3.4).
+  - or use Heighliner Docker image [ghcr.io/duality-labs/duality:15cb02ba6b8c87723c7fd4bd4ce0c3bf660d6aff](https://github.com/orgs/duality-labs/packages/container/duality/108783229?tag=15cb02ba6b8c87723c7fd4bd4ce0c3bf660d6aff) (specific commit for v0.3.4 release as specified by GitHub actions on the `main` branch commit or the release)
 
 To install gaiad, follow the instructions [here](https://hub.cosmos.network/main/getting-started/installation.html#install-the-binaries).
   - or use `make install` from [source code](https://github.com/cosmos/gaia/tree/v10.0.1)

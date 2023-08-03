@@ -65,19 +65,7 @@ jq ".app_state.adminmodule.admins += [\"$CONSUMER_USER_ADDRESS\"]" $CONSUMER_HOM
       $CONSUMER_HOME/edited_genesis.json && mv $CONSUMER_HOME/edited_genesis.json $CONSUMER_HOME/config/genesis.json
 sleep 1
 # add a second token to the balances to be able to perform deposits 
-# &&
-# append some custom fee tiers to unlock dex functionality
-jq '.app_state.bank.balances[].coins += [{"denom": "stake2", "amount": "1000000000000"}]
-       | .app_state.dex +=
- {
-     "FeeTierList": [
-        {"fee": "1", "id": "0"},
-        {"fee": "3", "id": "1"}, 
-        {"fee": "5", "id": "2"}, 
-        {"fee": "10", "id": "3"}
-    ],
-    "FeeTierCount": "4",
-}' $CONSUMER_HOME/config/genesis.json > \
+jq '.app_state.bank.balances[].coins += [{"denom": "stake2", "amount": "1000000000000"}]' $CONSUMER_HOME/config/genesis.json > \
  $CONSUMER_HOME/edited_genesis.json && mv $CONSUMER_HOME/edited_genesis.json $CONSUMER_HOME/config/genesis.json
 # Copy validator key files
 cp $PROVIDER_HOME/config/priv_validator_key.json $CONSUMER_HOME/config/priv_validator_key.json
