@@ -48,4 +48,7 @@ EXPOSE 9071
 ENV NODE_IP=0.0.0.0
 
 # start full deployment and keep containers alive
-CMD bash scripts/full-deployment/run.sh && echo "Ready ✨" && tail -f /dev/null;
+CMD [ \
+    "/bin/sh", "-c", \
+    "bash scripts/full-deployment/run.sh; echo 'Ready ✨'; tail -f /dev/null;" \
+    ]

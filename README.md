@@ -11,7 +11,7 @@ You can build and run the full deployment for example like this:
 docker build -t duality:local-environments .
 # see Dockerfile for full list of available ports and their uses
 # flag --rm removes the container on exit (useful to reset the environment)
-docker run -it --rm \
+docker run -it --init --rm \
   -p 26658:26658 \
   -p 9091:9091 \
   -p 26668:26668 \
