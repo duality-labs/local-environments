@@ -44,6 +44,11 @@ then
        exit 1
 fi
 
+# edit ccv section to include sections in consumer chain that don't exist in gaiad
+# see: https://github.com/cosmos/testnets/blob/44ac20213af02e64f4b7eed21ec9cb9508bbe893/replicated-security/duality-testnet-1/README.md?plain=1#L27
+jq '.params.soft_opt_out_threshold = "0.05"' "$CONSUMER_HOME"/consumer_section.json > "$CONSUMER_HOME"/edited_consumer_section.json && \
+	mv "$CONSUMER_HOME"/edited_consumer_section.json "$CONSUMER_HOME"/consumer_section.json
+
 jq -s '.[0].app_state.ccvconsumer = .[1] | .[0]' "$CONSUMER_HOME"/config/genesis.json "$CONSUMER_HOME"/consumer_section.json > "$CONSUMER_HOME"/genesis_consumer.json && \
 	mv "$CONSUMER_HOME"/genesis_consumer.json "$CONSUMER_HOME"/config/genesis.json
 
