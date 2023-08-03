@@ -51,9 +51,9 @@ go run cmd/tx-sim/main.go
 ## Running a Full Duality Deployment:
 To run a full Duality deployment, you will need the following additional software:
 
-- dualityd (v0.3.4 as used in duality-testnet-1 on Interchain Security)
-- gaiad (v10.0.1 as used in duality-testnet-1 on Interchain Security)
-- hermes: IBC relayer (v1.5.1 as used in duality-testnet-1 on Interchain Security)
+- `dualityd` (v0.3.4 as used in duality-testnet-1 on Interchain Security)
+- `gaiad` (v10.0.1 as used in duality-testnet-1 on Interchain Security)
+- `hermes`: IBC relayer (v1.5.1 as used in duality-testnet-1 on Interchain Security)
   - Rust (optional, v1.70 or later)
 
 To install dualityd, follow the instructions [here](https://github.com/duality-labs/duality/tree/v0.3.4).
