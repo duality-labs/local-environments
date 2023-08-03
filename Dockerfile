@@ -26,4 +26,22 @@ RUN --mount=type=cache,target=/go/pkg/mod go mod download
 COPY cmd /workspace/cmd
 COPY scripts /workspace/scripts
 
+# expose ports
+# PROVIDER_RPC_LADDR
+EXPOSE 26658
+# PROVIDER_GRPC_ADDR
+EXPOSE 9091
+# PROVIDER_RPC_LADDR1
+EXPOSE 26668
+# PROVIDER_GRPC_ADDR1
+EXPOSE 9101
+# CONSUMER_RPC_LADDR
+EXPOSE 26648
+# CONSUMER_GRPC_ADDR
+EXPOSE 9081
+# CONSUMER_RPC_LADDR1
+EXPOSE 26638
+# CONSUMER_GRPC_ADDR1
+EXPOSE 9071
+
 CMD bash scripts/full-deployment/run.sh
