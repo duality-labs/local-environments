@@ -44,4 +44,5 @@ EXPOSE 26638
 # CONSUMER_GRPC_ADDR1
 EXPOSE 9071
 
-CMD bash scripts/full-deployment/run.sh
+# start full deployment and keep containers alive
+CMD bash scripts/full-deployment/run.sh && tail -f /dev/null;
