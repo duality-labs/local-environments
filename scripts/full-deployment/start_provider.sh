@@ -5,7 +5,7 @@ TOTAL_COINS=100000000000stake
 STAKE_COINS=100000000stake
 TOTAL_COINS1=100000000000stake
 STAKE_COINS1=1000000stake
-PROVIDER_BINARY=${PROVIDER_BINARY:-interchain-security-pd}
+PROVIDER_BINARY=${PROVIDER_BINARY:-gaiad}
 PROVIDER_HOME="$HOME/.provider"
 PROVIDER_HOME1="$HOME/.provider1"
 PROVIDER_CHAIN_ID=provider
@@ -105,23 +105,23 @@ sleep 10
 # Build consumer chain proposal file
 tee $PROVIDER_HOME/consumer-proposal.json<<EOF
 {
-    "title": "Create a chain",
+    "title": "Create the duality chain",
     "description": "Gonna be a great chain",
     "chain_id": "duality",
     "initial_height": {
         "revision_number": 0,
         "revision_height": 1
     },
-    "genesis_hash": "519df96a862c30f53e67b1277e6834ab4bd59dfdd08c781d1b7cf3813080fb28",
-    "binary_hash": "09184916f3e85aa6fa24d3c12f1e5465af2214f13db265a52fa9f4617146dea5",
-    "spawn_time": "2022-06-01T09:10:00.000000000-00:00",
+    "genesis_hash": "c8f52491ade11a69907712e5d257e63a1a55ac47236c7259714ce8aa767b3640",
+    "binary_hash": "39f3d1cc943a70df579285053732fcf357a5dc241124a44a2e549333433509c2",
+    "spawn_time": "2023-07-12T15:00:00Z",
     "blocks_per_distribution_transmission": 1000,
     "consumer_redistribution_fraction": "0.75",
     "historical_entries": 10000,
-    "transfer_timeout_period": 3600000000000,
+    "transfer_timeout_period": 1800000000000,
     "ccv_timeout_period": 2419200000000000,
     "unbonding_period": 1728000000000000,
-    "deposit": "10000001stake"
+    "deposit": "10000000stake"
 }
 EOF
 

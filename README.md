@@ -51,11 +51,13 @@ go run cmd/tx-sim/main.go
 ## Running a Full Duality Deployment:
 To run a full Duality deployment, you will need the following additional software:
 
-- interchain-security-pd (v0.2.1 required since later commits change proposal structure)
+- gaiad (v10.0.1 as used in duality-testnet-1 on Interchain Security)
 - Hermes IBC relayer (v0.15.0)
 - Rust (v1.65 or later)
 
-To install interchain-security-pd, follow the instructions [here](https://github.com/cosmos/interchain-security/tree/v0.2.1).
+To install gaiad, follow the instructions [here](https://hub.cosmos.network/main/getting-started/installation.html#install-the-binaries).
+  - or use `make install` from [source code](https://github.com/cosmos/gaia/tree/v10.0.1)
+  - or use Heighliner Docker image [ghcr.io/strangelove-ventures/heighliner/gaia:v10.0.1](https://github.com/strangelove-ventures/heighliner/pkgs/container/heighliner%2Fgaia/107555011?tag=v10.0.1)
 
 To install Rust, follow the instructions [here](https://www.rust-lang.org/tools/install).
 
