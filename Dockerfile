@@ -44,5 +44,8 @@ EXPOSE 26638
 # CONSUMER_GRPC_ADDR1
 EXPOSE 9071
 
+# by default use 0.0.0.0 for localhost to prevent internal traffic from blocking host traffic
+ENV NODE_IP=0.0.0.0
+
 # start full deployment and keep containers alive
 CMD bash scripts/full-deployment/run.sh && tail -f /dev/null;
