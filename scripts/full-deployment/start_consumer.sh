@@ -148,7 +148,7 @@ enabled = true
 [[chains]]
 account_prefix = "cosmos"
 clock_drift = "5s"
-gas_adjustment = 0.1
+gas_multiplier = 1.1
 grpc_addr = "tcp://${CONSUMER_GRPC_ADDR}"
 id = "$CONSUMER_CHAIN_ID"
 key_name = "relayer"
@@ -170,7 +170,7 @@ websocket_addr = "ws://${CONSUMER_RPC_LADDR}/websocket"
 [[chains]]
 account_prefix = "cosmos"
 clock_drift = "5s"
-gas_adjustment = 0.1
+gas_multiplier = 1.1
 grpc_addr = "tcp://${PROVIDER_GRPC_ADDR}"
 id = "$PROVIDER_CHAIN_ID"
 key_name = "relayer"
@@ -191,18 +191,18 @@ websocket_addr = "ws://${PROVIDER_RPC_LADDR}/websocket"
 EOF
 
 # Delete all previous keys in relayer
-hermes keys delete $CONSUMER_CHAIN_ID -a
-hermes keys delete $PROVIDER_CHAIN_ID -a
+hermes keys delete --chain $CONSUMER_CHAIN_ID --all
+hermes keys delete --chain $PROVIDER_CHAIN_ID --all
 
 # Restore keys to hermes relayer
-hermes keys restore --mnemonic "$(jq -r .mnemonic $CONSUMER_HOME/consumer_keypair.json)" $CONSUMER_CHAIN_ID
+hermes keys add --chain $CONSUMER_CHAIN_ID --key-file $CONSUMER_HOME/consumer_keypair.json
 # temp_start_provider.sh creates key pair and stores it in keypair.json
-hermes keys restore --mnemonic "$(jq -r .mnemonic $PROVIDER_HOME/keypair.json)" $PROVIDER_CHAIN_ID
+hermes keys add --chain $PROVIDER_CHAIN_ID --key-file $PROVIDER_HOME/keypair.json
 
 sleep 5
 
-hermes create connection $CONSUMER_CHAIN_ID --client-a 07-tendermint-0 --client-b 07-tendermint-0
-hermes create channel $CONSUMER_CHAIN_ID --port-a consumer --port-b provider -o ordered --channel-version 1 connection-0
+hermes create connection --a-chain $CONSUMER_CHAIN_ID --a-client 07-tendermint-0 --b-client 07-tendermint-0
+hermes create channel --a-chain $CONSUMER_CHAIN_ID --a-port consumer --b-port provider --order ordered --a-connection connection-0 --channel-version 1
 
 sleep 1
 
