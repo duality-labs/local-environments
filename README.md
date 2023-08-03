@@ -2,9 +2,39 @@
 
 ## Global Requirements
 
-To run the scripts in this repository, you need to have the following software installed:
+To run the scripts in this repository, you can use the Docker image or install all software manually:
 
-### OSX / Linux
+### Setup: Docker
+
+You can build and run the full deployment for example like this:
+```shell
+docker build -t duality:local-environments .
+# see Dockerfile for full list of available ports and their uses
+# flag --rm removes the container on exit (useful to reset the environment)
+docker run -it --init --rm \
+  -p 26658:26658 \
+  -p 9091:9091 \
+  -p 26668:26668 \
+  -p 9101:9101 \
+  -p 26648:26648 \
+  -p 9081:9081 \
+  -p 26638:26638 \
+  -p 9071:9071 \
+  duality:local-environments
+
+# to just enter the environment (eg. to explore tx-sim) you can use
+docker run -it duality:local-environments /bin/bash
+```
+
+Note that this image should be able to be built in multiple platforms, eg.
+- docker build --platform linux/amd64 -t duality:local-environments .
+- docker build --platform linux/arm64 -t duality:local-environments .
+
+but it is best to not compile hermes in a non-native platform. During testing:
+- on a Macbook Pro M1 Max building native linux/arm64 took ~6mins
+- on a Macbook Pro M1 Max building non-native linux/amd64 took ~50mins
+
+### Setup: OSX / Linux
 - Go v1.19
 - jq
 - dualityd
