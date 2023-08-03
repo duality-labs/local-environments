@@ -118,7 +118,9 @@ sleep 10
 # Setup Hermes in packet relayer mode
 killall hermes 2> /dev/null || true
 
-tee ~/.hermes/config.toml<<EOF
+rm -rf /root/.hermes
+mkdir /root/.hermes
+tee /root/.hermes/config.toml<<EOF
 [global]
 log_level = "trace"
 
