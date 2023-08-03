@@ -74,6 +74,9 @@ sleep 1
 cp $PROVIDER_HOME1/config/genesis.json $PROVIDER_HOME/config/genesis.json
 
 ####################ADDING PEERS####################
+# Set default client port
+sed -i -r "/node =/ s/= .*/= \"tcp:\/\/${PROVIDER_RPC_LADDR}\"/" $PROVIDER_HOME/config/client.toml
+sed -i -r "/node =/ s/= .*/= \"tcp:\/\/${PROVIDER_RPC_LADDR1}\"/" $PROVIDER_HOME1/config/client.toml
 node=$($PROVIDER_BINARY tendermint show-node-id --home $PROVIDER_HOME)
 node1=$($PROVIDER_BINARY tendermint show-node-id --home $PROVIDER_HOME1)
 sed -i -r "/persistent_peers =/ s/= .*/= \"$node@localhost:26656\"/" "$PROVIDER_HOME1"/config/config.toml

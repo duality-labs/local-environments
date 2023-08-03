@@ -201,6 +201,14 @@ hermes keys add --chain $PROVIDER_CHAIN_ID --key-file $PROVIDER_HOME/keypair.jso
 
 sleep 5
 
+# find status of clients using:
+# $ $CONSUMER_BINARY --home $CONSUMER_HOME query ibc client status 07-tendermint-0
+# $ $PROVIDER_BINARY --home $PROVIDER_HOME query ibc client status 07-tendermint-0
+# or state of clients using:
+# $ $CONSUMER_BINARY --home $CONSUMER_HOME query ibc client state 07-tendermint-0
+# $ $PROVIDER_BINARY --home $PROVIDER_HOME query ibc client state 07-tendermint-0
+# (the client IDs are "07-tendermint-0" because they are the first tendermint light clients crated on these chains)
+
 hermes create connection --a-chain $CONSUMER_CHAIN_ID --a-client 07-tendermint-0 --b-client 07-tendermint-0
 hermes create channel --a-chain $CONSUMER_CHAIN_ID --a-port consumer --b-port provider --order ordered --a-connection connection-0 --channel-version 1
 
