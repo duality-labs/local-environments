@@ -96,7 +96,8 @@ To install gaiad, follow the instructions [here](https://hub.cosmos.network/main
 To install Hermes, follow the instructions [here](https://hermes.informal.systems/quick-start/installation.html).
   - or install Rust and use `cargo install ibc-relayer-cli --version 1.5.1 --bin hermes --locked`
   - or use Docker image: [informalsystems/hermes:1.5.1](https://hub.docker.com/layers/informalsystems/hermes/1.5.1/images/sha256-3eb82f872b6f116f4a71c350292aff551381b65eeb7c11867f8cd33090c6eb0b?context=explore)
-    - this image can be problematic when running on Alpine Linux on an ARM CPU
+    - this image can be problematic when running on Alpine Linux on an ARM CPU.
+      I think this is because it was created using Debian (Buster) and not Alpine Linux
 
 To install Rust, follow the instructions [here](https://www.rust-lang.org/tools/install).
 
