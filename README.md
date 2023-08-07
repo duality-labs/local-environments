@@ -87,7 +87,7 @@ To run a full Duality deployment, you will need the following additional softwar
   - Rust (optional, v1.70 or later)
 
 To install dualityd, follow the instructions [here](https://github.com/duality-labs/duality/tree/v0.3.4).
-  - or use Heighliner Docker image [ghcr.io/duality-labs/duality:15cb02ba6b8c87723c7fd4bd4ce0c3bf660d6aff](https://github.com/orgs/duality-labs/packages/container/duality/108783229?tag=15cb02ba6b8c87723c7fd4bd4ce0c3bf660d6aff) (specific commit for v0.3.4 release as specified by GitHub actions on the `main` branch commit or the release)
+  - or use Heighliner Docker image [ghcr.io/strangelove-ventures/heighliner/duality:v0.3.4](https://github.com/strangelove-ventures/heighliner/pkgs/container/heighliner%2Fduality/116374490?tag=v0.3.4)
 
 To install gaiad, follow the instructions [here](https://hub.cosmos.network/main/getting-started/installation.html#install-the-binaries).
   - or use `make install` from [source code](https://github.com/cosmos/gaia/tree/v10.0.1)
