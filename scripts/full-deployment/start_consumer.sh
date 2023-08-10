@@ -90,13 +90,15 @@ cp $PROVIDER_HOME1/config/priv_validator_key.json $CONSUMER_HOME1/config/priv_va
 cp $PROVIDER_HOME1/config/node_key.json $CONSUMER_HOME1/config/node_key.json
 
 ##########SET CONFIG.TOML#####################
-# Set default client port
-sed -i -r "/node =/ s/= .*/= \"tcp:\/\/${CONSUMER_RPC_LADDR1}\"/" $CONSUMER_HOME1/config/client.toml
-sed -i -r "/node =/ s/= .*/= \"tcp:\/\/${CONSUMER_RPC_LADDR}\"/" $CONSUMER_HOME/config/client.toml
 node=$($CONSUMER_BINARY tendermint show-node-id --home $CONSUMER_HOME)
 node1=$($CONSUMER_BINARY tendermint show-node-id --home $CONSUMER_HOME1)
+# Set persistent_peers with sed as an example of how to do so when dasel is not available
 sed -i -r "/persistent_peers =/ s/= .*/= \"$node1@localhost:26636\"/" "$CONSUMER_HOME"/config/config.toml
 sed -i -r "/persistent_peers =/ s/= .*/= \"$node@localhost:26646\"/" "$CONSUMER_HOME1"/config/config.toml
+
+# Set default RPC port
+dasel put -f "$CONSUMER_HOME"/config/config.toml -t string ".rpc.laddr" -v "tcp://$CONSUMER_RPC_LADDR"
+dasel put -f "$CONSUMER_HOME1"/config/config.toml -t string ".rpc.laddr" -v "tcp://$CONSUMER_RPC_LADDR1"
 
 # Enable REST API with address
 dasel put -f "$CONSUMER_HOME"/config/app.toml -t bool ".api.enable" -v "true"
