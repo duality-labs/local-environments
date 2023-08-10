@@ -145,6 +145,9 @@ enabled = true
 
 [mode.packets]
 enabled = true
+clear_interval = 100
+clear_on_start = true
+tx_confirmation = true
 
 [[chains]]
 account_prefix = "cosmos"
