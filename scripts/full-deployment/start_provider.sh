@@ -15,8 +15,10 @@ VALIDATOR1=validator1
 NODE_IP="${NODE_IP:-localhost}"
 PROVIDER_RPC_LADDR="$NODE_IP:26658"
 PROVIDER_GRPC_ADDR="$NODE_IP:9091"
+PROVIDER_REST_ADDR="$NODE_IP:1318"
 PROVIDER_RPC_LADDR1="$NODE_IP:26668"
 PROVIDER_GRPC_ADDR1="$NODE_IP:9101"
+PROVIDER_REST_ADDR1="$NODE_IP:1328"
 PROVIDER_DELEGATOR=delegator
 
 # Clean start
@@ -74,13 +76,29 @@ sleep 1
 cp $PROVIDER_HOME1/config/genesis.json $PROVIDER_HOME/config/genesis.json
 
 ####################ADDING PEERS####################
-# Set default client port
-sed -i -r "/node =/ s/= .*/= \"tcp:\/\/${PROVIDER_RPC_LADDR}\"/" $PROVIDER_HOME/config/client.toml
-sed -i -r "/node =/ s/= .*/= \"tcp:\/\/${PROVIDER_RPC_LADDR1}\"/" $PROVIDER_HOME1/config/client.toml
 node=$($PROVIDER_BINARY tendermint show-node-id --home $PROVIDER_HOME)
 node1=$($PROVIDER_BINARY tendermint show-node-id --home $PROVIDER_HOME1)
+# Set persistent_peers with sed as an example of how to do so when dasel is not available
 sed -i -r "/persistent_peers =/ s/= .*/= \"$node@localhost:26656\"/" "$PROVIDER_HOME1"/config/config.toml
 sed -i -r "/persistent_peers =/ s/= .*/= \"$node1@localhost:26666\"/" "$PROVIDER_HOME"/config/config.toml
+
+# Set default RPC port for serving and for CLI client usage
+dasel put -f "$PROVIDER_HOME"/config/config.toml -t string ".rpc.laddr" -v "tcp://$PROVIDER_RPC_LADDR"
+dasel put -f "$PROVIDER_HOME1"/config/config.toml -t string ".rpc.laddr" -v "tcp://$PROVIDER_RPC_LADDR1"
+dasel put -f "$PROVIDER_HOME"/config/client.toml -t string ".node" -v "tcp://$PROVIDER_RPC_LADDR"
+dasel put -f "$PROVIDER_HOME1"/config/client.toml -t string ".node" -v "tcp://$PROVIDER_RPC_LADDR1"
+
+# Enable REST API with address
+dasel put -f "$PROVIDER_HOME"/config/app.toml -t bool ".api.enable" -v "true"
+dasel put -f "$PROVIDER_HOME"/config/app.toml -t string ".api.address" -v "tcp://$PROVIDER_REST_ADDR"
+dasel put -f "$PROVIDER_HOME1"/config/app.toml -t bool ".api.enable" -v "true"
+dasel put -f "$PROVIDER_HOME1"/config/app.toml -t string ".api.address" -v "tcp://$PROVIDER_REST_ADDR1"
+
+# Allow unsafe CORS requests for development
+dasel put -f "$PROVIDER_HOME"/config/app.toml -t bool ".api.enabled-unsafe-cors" -v "true"
+dasel put -f "$PROVIDER_HOME"/config/config.toml -t json ".rpc.cors_allowed_origins" -v '["*"]'
+dasel put -f "$PROVIDER_HOME1"/config/app.toml -t bool ".api.enabled-unsafe-cors" -v "true"
+dasel put -f "$PROVIDER_HOME1"/config/config.toml -t json ".rpc.cors_allowed_origins" -v '["*"]'
 
 #################### Start the chain node1 ###################
 $PROVIDER_BINARY start \
