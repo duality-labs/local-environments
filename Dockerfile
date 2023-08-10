@@ -16,6 +16,7 @@ RUN apk add bash curl jq;
 COPY --from=ghcr.io/strangelove-ventures/heighliner/gaia:v10.0.1 /bin/gaiad /usr/bin
 COPY --from=ghcr.io/duality-labs/duality:15cb02ba6b8c87723c7fd4bd4ce0c3bf660d6aff /bin/dualityd /usr/bin
 COPY --from=hermes-builder /usr/local/cargo/bin/hermes /usr/bin
+COPY --from=ghcr.io/tomwright/dasel:v2.3.4-alpine /usr/local/bin/dasel /usr/bin
 
 # add Go packages (with cache) for tx-sim
 WORKDIR /workspace
@@ -31,18 +32,26 @@ COPY scripts /workspace/scripts
 EXPOSE 26658
 # PROVIDER_GRPC_ADDR
 EXPOSE 9091
+# PROVIDER_LCD_LADDR
+EXPOSE 1318
 # PROVIDER_RPC_LADDR1
 EXPOSE 26668
 # PROVIDER_GRPC_ADDR1
 EXPOSE 9101
+# PROVIDER_LCD_LADDR1
+EXPOSE 1328
 # CONSUMER_RPC_LADDR
 EXPOSE 26648
 # CONSUMER_GRPC_ADDR
 EXPOSE 9081
+# CONSUMER_LCD_LADDR
+EXPOSE 1308
 # CONSUMER_RPC_LADDR1
 EXPOSE 26638
 # CONSUMER_GRPC_ADDR1
 EXPOSE 9071
+# CONSUMER_LCD_LADDR1
+EXPOSE 1298
 
 # by default use 0.0.0.0 for localhost to prevent internal traffic from blocking host traffic
 ENV NODE_IP=0.0.0.0

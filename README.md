@@ -14,12 +14,16 @@ docker build -t duality:local-environments .
 docker run -it --init --rm \
   -p 26658:26658 \
   -p 9091:9091 \
+  -p 1318:1318 \
   -p 26668:26668 \
   -p 9101:9101 \
+  -p 1328:1328 \
   -p 26648:26648 \
   -p 9081:9081 \
+  -p 1308:1308 \
   -p 26638:26638 \
   -p 9071:9071 \
+  -p 1298:1298 \
   duality:local-environments
 
 # to just enter the environment (eg. to explore tx-sim) you can use
