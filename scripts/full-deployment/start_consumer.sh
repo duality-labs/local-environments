@@ -215,7 +215,7 @@ hermes create channel --a-chain $CONSUMER_CHAIN_ID --a-port consumer --b-port pr
 
 sleep 1
 
-hermes -j start &> ~/.hermes/logs &
+hermes --json start &> ~/.hermes/logs &
 
 ############################################################
 
