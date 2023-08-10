@@ -82,9 +82,11 @@ node1=$($PROVIDER_BINARY tendermint show-node-id --home $PROVIDER_HOME1)
 sed -i -r "/persistent_peers =/ s/= .*/= \"$node@localhost:26656\"/" "$PROVIDER_HOME1"/config/config.toml
 sed -i -r "/persistent_peers =/ s/= .*/= \"$node1@localhost:26666\"/" "$PROVIDER_HOME"/config/config.toml
 
-# Set default RPC port
+# Set default RPC port for serving and for CLI client usage
 dasel put -f "$PROVIDER_HOME"/config/config.toml -t string ".rpc.laddr" -v "tcp://$PROVIDER_RPC_LADDR"
 dasel put -f "$PROVIDER_HOME1"/config/config.toml -t string ".rpc.laddr" -v "tcp://$PROVIDER_RPC_LADDR1"
+dasel put -f "$PROVIDER_HOME"/config/client.toml -t string ".node" -v "tcp://$PROVIDER_RPC_LADDR"
+dasel put -f "$PROVIDER_HOME1"/config/client.toml -t string ".node" -v "tcp://$PROVIDER_RPC_LADDR1"
 
 # Enable REST API with address
 dasel put -f "$PROVIDER_HOME"/config/app.toml -t bool ".api.enable" -v "true"
