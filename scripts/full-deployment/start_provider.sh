@@ -90,6 +90,12 @@ dasel put -f "$PROVIDER_HOME"/config/app.toml -t string ".api.address" -v "tcp:/
 dasel put -f "$PROVIDER_HOME1"/config/app.toml -t bool ".api.enable" -v "true"
 dasel put -f "$PROVIDER_HOME1"/config/app.toml -t string ".api.address" -v "tcp://$PROVIDER_REST_ADDR1"
 
+# Allow unsafe CORS requests for development
+dasel put -f "$PROVIDER_HOME"/config/app.toml -t bool ".api.enabled-unsafe-cors" -v "true"
+dasel put -f "$PROVIDER_HOME"/config/config.toml -t json ".rpc.cors_allowed_origins" -v '["*"]'
+dasel put -f "$PROVIDER_HOME1"/config/app.toml -t bool ".api.enabled-unsafe-cors" -v "true"
+dasel put -f "$PROVIDER_HOME1"/config/config.toml -t json ".rpc.cors_allowed_origins" -v '["*"]'
+
 #################### Start the chain node1 ###################
 $PROVIDER_BINARY start \
 	--home $PROVIDER_HOME \
