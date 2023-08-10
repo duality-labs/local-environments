@@ -10,6 +10,7 @@ PROVIDER_HOME="$HOME/.provider"
 PROVIDER_HOME1="$HOME/.provider1"
 PROVIDER_CHAIN_ID=provider
 PROVIDER_MONIKER=provider
+PROVIDER_MONIKER1=provider-1
 VALIDATOR=validator
 VALIDATOR1=validator1
 NODE_IP="${NODE_IP:-localhost}"
@@ -50,7 +51,7 @@ sleep 1
 ###########VALIDATOR 2############################
 rm -rf $PROVIDER_HOME1
 
-$PROVIDER_BINARY init $PROVIDER_MONIKER --home $PROVIDER_HOME1 --chain-id $PROVIDER_CHAIN_ID
+$PROVIDER_BINARY init $PROVIDER_MONIKER1 --home $PROVIDER_HOME1 --chain-id $PROVIDER_CHAIN_ID
 cp $PROVIDER_HOME/config/genesis.json $PROVIDER_HOME1/config/genesis.json
 
 # Create account keypair

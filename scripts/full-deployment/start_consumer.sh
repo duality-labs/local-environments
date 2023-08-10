@@ -6,6 +6,7 @@ CONSUMER_HOME1="$HOME/.duality1"
 PROVIDER_CHAIN_ID="provider"
 CONSUMER_CHAIN_ID="duality"
 MONIKER="duality"
+MONIKER1="duality-1"
 VALIDATOR="validator"
 VALIDATOR1="validator1"
 KEYRING="--keyring-backend test"
@@ -77,7 +78,7 @@ cp $PROVIDER_HOME/config/priv_validator_key.json $CONSUMER_HOME/config/priv_vali
 cp $PROVIDER_HOME/config/node_key.json $CONSUMER_HOME/config/node_key.json
 
 #######CHAIN2#######
-$CONSUMER_BINARY init --chain-id $CONSUMER_CHAIN_ID $MONIKER --home $CONSUMER_HOME1
+$CONSUMER_BINARY init --chain-id $CONSUMER_CHAIN_ID $MONIKER1 --home $CONSUMER_HOME1
 sleep 1
 #copy genesis
 cp $CONSUMER_HOME/config/genesis.json $CONSUMER_HOME1/config/genesis.json
@@ -144,6 +145,9 @@ enabled = true
 
 [mode.packets]
 enabled = true
+clear_interval = 100
+clear_on_start = true
+tx_confirmation = true
 
 [[chains]]
 account_prefix = "cosmos"
@@ -183,7 +187,7 @@ websocket_addr = "ws://${PROVIDER_RPC_LADDR}/websocket"
 
 [chains.gas_price]
        denom = "stake"
-       price = 0.00
+       price = 0.0025
 
 [chains.trust_threshold]
        denominator = "3"
@@ -214,7 +218,7 @@ hermes create channel --a-chain $CONSUMER_CHAIN_ID --a-port consumer --b-port pr
 
 sleep 1
 
-hermes -j start &> ~/.hermes/logs &
+hermes --json start &> ~/.hermes/logs &
 
 ############################################################
 
