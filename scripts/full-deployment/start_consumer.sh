@@ -187,7 +187,7 @@ websocket_addr = "ws://${PROVIDER_RPC_LADDR}/websocket"
 
 [chains.gas_price]
        denom = "stake"
-       price = 0.00
+       price = 0.0025
 
 [chains.trust_threshold]
        denominator = "3"
